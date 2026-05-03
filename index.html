@@ -4,81 +4,535 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LinkedIn Banner Editor</title>
+
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/spoqa/spoqa-han-sans@latest/css/SpoqaHanSansNeo.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/noto-sans-kr/index.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/noto-serif-kr/index.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/roboto/index.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/open-sans/index.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/lato/index.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/montserrat/index.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/poppins/index.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/raleway/index.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/oswald/index.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/merriweather/index.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/playfair-display/index.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fontsource/dancing-script/index.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'Segoe UI',sans-serif;background:#f5f5f5;min-height:100vh;padding:40px 20px;display:flex;justify-content:center;}
-    .page{width:100%;max-width:1000px;}
-    h2{font-size:18px;font-weight:500;color:#333;margin-bottom:20px;}
-    .panel{background:#fff;border-radius:12px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
-    .panel-title{font-size:11px;font-weight:600;color:#999;letter-spacing:.6px;text-transform:uppercase;margin-bottom:12px;}
-    .row{display:grid;gap:10px;margin-bottom:10px;}
-    .row-4{grid-template-columns:1fr 1fr 1fr 1fr;}
-    .fg{display:flex;flex-direction:column;gap:5px;}
-    .fg label{font-size:12px;color:#666;}
-    .fg input[type=text],.fg select{font-size:13px;padding:7px 10px;border:1px solid #ddd;border-radius:8px;width:100%;outline:none;background:#fff;}
-    .fg input[type=text]:focus,.fg select:focus{border-color:#5a7a8c;}
-    .fg input[type=range]{width:100%;accent-color:#5a7a8c;}
-    .fg input[type=color]{width:100%;height:36px;border:1px solid #ddd;border-radius:8px;cursor:pointer;padding:2px;}
-    .sz-val{font-size:12px;color:#999;display:inline;}
-    .color-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
-    .presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
-    .preset-btn{width:44px;height:26px;border-radius:6px;border:2px solid transparent;cursor:pointer;transition:transform .15s;}
-    .preset-btn:hover{transform:scale(1.1);}
-    .preset-btn.active{border-color:#5a7a8c;}
-    .banner-wrapper{position:relative;border-radius:12px;overflow:hidden;cursor:context-menu;}
-    .banner-wrapper:hover .hover-hint{opacity:1;}
-    .hover-hint{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:4px 10px;border-radius:20px;opacity:0;transition:opacity .2s;pointer-events:none;}
-    #banner{width:100%;height:200px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-    #banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.1) 0%,transparent 60%);}
-    .hc{text-align:center;z-index:2;color:white;text-shadow:0 2px 10px rgba(0,0,0,.3);padding:0 20px;}
-    #el-logo{width:60px;height:60px;background:rgba(255,255,255,.2);border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-weight:bold;border:2px solid rgba(255,255,255,.3);color:white;font-size:22px;}
-    #el-name{font-weight:300;letter-spacing:2px;margin-bottom:6px;color:white;font-size:28px;}
-    #el-tag{opacity:.9;font-weight:300;letter-spacing:1px;margin:0;color:white;font-size:14px;}
-    .ctx-menu{position:fixed;background:#fff;border:1px solid #eee;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.12);z-index:9999;overflow:hidden;min-width:180px;display:none;}
-    .ctx-item{padding:11px 16px;font-size:13px;cursor:pointer;color:#333;display:flex;align-items:center;gap:10px;}
-    .ctx-item:hover{background:#f5f5f5;}
-    .ctx-sep{height:1px;background:#eee;}
-    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:9px 22px;border-radius:20px;font-size:13px;pointer-events:none;opacity:0;transition:opacity .3s;z-index:9999;}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .page-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 4px;
+    }
+
+    .page-sub {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+
+    .btn-all-reset {
+      font-size: 13px;
+      padding: 7px 16px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      background: #fff;
+      color: #666;
+      cursor: pointer;
+    }
+    .btn-all-reset:hover { background: #f5f5f5; }
+
+    .panel {
+      background: #fff;
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+
+    .panel-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #999;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .ts {
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .ts:last-child { padding-bottom: 0; margin-bottom: 0; border-bottom: none; }
+
+    .ts-r1 {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: end;
+      margin-bottom: 10px;
+    }
+
+    .ts-r2 {
+      display: grid;
+      grid-template-columns: 2fr 2fr 1fr;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .fg { display: flex; flex-direction: column; gap: 5px; }
+
+    .fg label { font-size: 12px; color: #777; }
+
+    .fg input[type=text],
+    .fg select {
+      font-size: 13px;
+      padding: 7px 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #fff;
+      color: #222;
+      width: 100%;
+      outline: none;
+    }
+    .fg input[type=text]:focus,
+    .fg select:focus { border-color: #5a7a8c; }
+
+    .fg input[type=range] { width: 100%; accent-color: #5a7a8c; margin-top: 2px; }
+
+    .sz-lbl { font-size: 12px; color: #999; }
+
+    .btn-reset {
+      font-size: 12px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      background: #fff;
+      color: #888;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-reset:hover { background: #f5f5f5; }
+
+    /* Color Swatch */
+    .sw-wrap { position: relative; }
+
+    .sw-btn {
+      width: 100%;
+      padding: 5px 8px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .sw-btn:hover { background: #f9f9f9; }
+
+    .sw-dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      flex-shrink: 0;
+      border: 1px solid rgba(0,0,0,.08);
+    }
+
+    .sw-hex { font-size: 11px; font-family: monospace; color: #888; }
+
+    /* Color Picker Popover */
+    .cp-pop {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      z-index: 500;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 14px;
+      width: 220px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      display: none;
+    }
+    .cp-pop.open { display: block; }
+
+    .cp-native {
+      width: 100%;
+      height: 40px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 2px;
+      margin-bottom: 10px;
+    }
+
+    .cp-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .cp-row label { font-size: 12px; color: #888; width: 28px; flex-shrink: 0; }
+    .cp-row input {
+      flex: 1;
+      font-size: 13px;
+      padding: 5px 8px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      background: #fff;
+      color: #222;
+      outline: none;
+      font-family: monospace;
+    }
+
+    .cp-rgb-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+
+    .cp-rgb-item { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+    .cp-rgb-item label { font-size: 11px; color: #999; }
+    .cp-rgb-item input {
+      font-size: 12px;
+      padding: 4px;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      background: #fff;
+      color: #222;
+      text-align: center;
+      width: 100%;
+      outline: none;
+    }
+
+    /* Presets */
+    .presets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+
+    .preset-btn {
+      width: 40px;
+      height: 26px;
+      border-radius: 6px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: transform .12s;
+    }
+    .preset-btn:hover { transform: scale(1.1); }
+    .preset-btn.active { border-color: #5a7a8c; }
+
+    .bg-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+    /* Banner */
+    .banner-wrap {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: context-menu;
+      box-shadow: 0 4px 16px rgba(0,0,0,.1);
+    }
+    .banner-wrap:hover .hover-hint { opacity: 1; }
+
+    .hover-hint {
+      position: absolute;
+      bottom: 12px;
+      right: 14px;
+      background: rgba(0,0,0,.55);
+      color: #fff;
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      opacity: 0;
+      transition: opacity .2s;
+      pointer-events: none;
+    }
+
+    #banner {
+      width: 100%;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #banner::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,.1) 0%, transparent 60%);
+    }
+
+    .hc {
+      text-align: center;
+      z-index: 2;
+      color: white;
+      text-shadow: 0 2px 10px rgba(0,0,0,.3);
+      padding: 0 20px;
+    }
+
+    #el-logo {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,255,255,.2);
+      border-radius: 50%;
+      margin: 0 auto 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      border: 2px solid rgba(255,255,255,.3);
+      font-size: 22px;
+      color: white;
+    }
+
+    #el-name {
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      color: white;
+    }
+
+    #el-tag {
+      font-size: 14px;
+      font-weight: 300;
+      letter-spacing: 1px;
+      color: white;
+      opacity: .9;
+    }
+
+    /* Context Menu */
+    .ctx-menu {
+      position: fixed;
+      background: #fff;
+      border: 1px solid #e8e8e8;
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      z-index: 999;
+      overflow: hidden;
+      min-width: 180px;
+      display: none;
+    }
+
+    .ctx-item {
+      padding: 11px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .ctx-item:hover { background: #f5f5f5; }
+
+    .ctx-sep { height: 1px; background: #f0f0f0; }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222;
+      color: #fff;
+      padding: 9px 22px;
+      border-radius: 20px;
+      font-size: 13px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .3s;
+      z-index: 999;
+    }
   </style>
 </head>
 <body>
 <div class="page">
-  <h2>LinkedIn Banner Editor</h2>
+  <p class="page-title">LinkedIn Banner Editor</p>
+  <p class="page-sub">텍스트와 색상을 설정한 뒤, 배너 위에서 우클릭으로 저장하세요.</p>
 
+  <div class="top-bar">
+    <button class="btn-all-reset" onclick="resetAll()">↺ 전체 초기화</button>
+  </div>
+
+  <!-- 텍스트 설정 -->
   <div class="panel">
-    <div class="panel-title">텍스트 설정</div>
-    <div class="row row-4" style="align-items:end;">
-      <div class="fg"><label>로고 이니셜</label><input type="text" id="inp-logo" maxlength="4" placeholder="Your Initial Name"></div>
-      <div class="fg"><label>폰트</label><select id="fnt-logo"></select></div>
-      <div class="fg"><label>크기 <span class="sz-val" id="v-logo">22px</span></label><input type="range" id="sz-logo" min="12" max="40" value="22"></div>
-      <div class="fg"><label>색상</label><input type="color" id="col-logo" value="#ffffff"></div>
+    <div class="panel-label">텍스트 설정</div>
+
+    <!-- 로고 -->
+    <div class="ts">
+      <div class="ts-r1">
+        <div class="fg"><label>로고 이니셜</label><input type="text" id="inp-logo" maxlength="4" placeholder="예) SH"></div>
+        <button class="btn-reset" onclick="resetSection('logo')">↺ 초기화</button>
+      </div>
+      <div class="ts-r2">
+        <div class="fg"><label>폰트</label><select id="fnt-logo"></select></div>
+        <div class="fg"><label>크기 <span class="sz-lbl" id="v-logo">22px</span></label><input type="range" id="sz-logo" min="12" max="40" value="22"></div>
+        <div class="fg"><label>색상</label>
+          <div class="sw-wrap">
+            <button class="sw-btn" onclick="togglePicker(event,'logo')">
+              <div class="sw-dot" id="dot-logo" style="background:#ffffff;"></div>
+              <span class="sw-hex" id="hex-logo">#ffffff</span>
+            </button>
+            <div class="cp-pop" id="pop-logo">
+              <input type="color" class="cp-native" id="cpn-logo" value="#ffffff">
+              <div class="cp-row"><label>HEX</label><input type="text" id="cph-logo" value="#ffffff" maxlength="7" placeholder="#ffffff"></div>
+              <div class="cp-rgb-grid">
+                <div class="cp-rgb-item"><label>R</label><input type="number" id="cpr-logo" min="0" max="255" value="255"></div>
+                <div class="cp-rgb-item"><label>G</label><input type="number" id="cpg-logo" min="0" max="255" value="255"></div>
+                <div class="cp-rgb-item"><label>B</label><input type="number" id="cpb-logo" min="0" max="255" value="255"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="row row-4" style="align-items:end;">
-      <div class="fg"><label>이름</label><input type="text" id="inp-name" placeholder="Your Name"></div>
-      <div class="fg"><label>폰트</label><select id="fnt-name"></select></div>
-      <div class="fg"><label>크기 <span class="sz-val" id="v-name">28px</span></label><input type="range" id="sz-name" min="14" max="60" value="28"></div>
-      <div class="fg"><label>색상</label><input type="color" id="col-name" value="#ffffff"></div>
+
+    <!-- 이름 -->
+    <div class="ts">
+      <div class="ts-r1">
+        <div class="fg"><label>이름</label><input type="text" id="inp-name" placeholder="예) Sehee Ku"></div>
+        <button class="btn-reset" onclick="resetSection('name')">↺ 초기화</button>
+      </div>
+      <div class="ts-r2">
+        <div class="fg"><label>폰트</label><select id="fnt-name"></select></div>
+        <div class="fg"><label>크기 <span class="sz-lbl" id="v-name">28px</span></label><input type="range" id="sz-name" min="14" max="60" value="28"></div>
+        <div class="fg"><label>색상</label>
+          <div class="sw-wrap">
+            <button class="sw-btn" onclick="togglePicker(event,'name')">
+              <div class="sw-dot" id="dot-name" style="background:#ffffff;"></div>
+              <span class="sw-hex" id="hex-name">#ffffff</span>
+            </button>
+            <div class="cp-pop" id="pop-name">
+              <input type="color" class="cp-native" id="cpn-name" value="#ffffff">
+              <div class="cp-row"><label>HEX</label><input type="text" id="cph-name" value="#ffffff" maxlength="7" placeholder="#ffffff"></div>
+              <div class="cp-rgb-grid">
+                <div class="cp-rgb-item"><label>R</label><input type="number" id="cpr-name" min="0" max="255" value="255"></div>
+                <div class="cp-rgb-item"><label>G</label><input type="number" id="cpg-name" min="0" max="255" value="255"></div>
+                <div class="cp-rgb-item"><label>B</label><input type="number" id="cpb-name" min="0" max="255" value="255"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="row row-4" style="align-items:end;">
-      <div class="fg"><label>태그라인</label><input type="text" id="inp-tag" placeholder="Your tagline"></div>
-      <div class="fg"><label>폰트</label><select id="fnt-tag"></select></div>
-      <div class="fg"><label>크기 <span class="sz-val" id="v-tag">14px</span></label><input type="range" id="sz-tag" min="10" max="36" value="14"></div>
-      <div class="fg"><label>색상</label><input type="color" id="col-tag" value="#ffffff"></div>
+
+    <!-- 태그라인 -->
+    <div class="ts">
+      <div class="ts-r1">
+        <div class="fg"><label>태그라인</label><input type="text" id="inp-tag" placeholder="예) Marketing Expert"></div>
+        <button class="btn-reset" onclick="resetSection('tag')">↺ 초기화</button>
+      </div>
+      <div class="ts-r2">
+        <div class="fg"><label>폰트</label><select id="fnt-tag"></select></div>
+        <div class="fg"><label>크기 <span class="sz-lbl" id="v-tag">14px</span></label><input type="range" id="sz-tag" min="10" max="36" value="14"></div>
+        <div class="fg"><label>색상</label>
+          <div class="sw-wrap">
+            <button class="sw-btn" onclick="togglePicker(event,'tag')">
+              <div class="sw-dot" id="dot-tag" style="background:#ffffff;"></div>
+              <span class="sw-hex" id="hex-tag">#ffffff</span>
+            </button>
+            <div class="cp-pop" id="pop-tag">
+              <input type="color" class="cp-native" id="cpn-tag" value="#ffffff">
+              <div class="cp-row"><label>HEX</label><input type="text" id="cph-tag" value="#ffffff" maxlength="7" placeholder="#ffffff"></div>
+              <div class="cp-rgb-grid">
+                <div class="cp-rgb-item"><label>R</label><input type="number" id="cpr-tag" min="0" max="255" value="255"></div>
+                <div class="cp-rgb-item"><label>G</label><input type="number" id="cpg-tag" min="0" max="255" value="255"></div>
+                <div class="cp-rgb-item"><label>B</label><input type="number" id="cpb-tag" min="0" max="255" value="255"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- 배경 그라데이션 -->
   <div class="panel">
-    <div class="panel-title">배경 그라데이션</div>
+    <div class="panel-label">배경 그라데이션</div>
     <div class="presets" id="presets"></div>
-    <div class="color-row">
-      <div class="fg"><label>색상 1 (좌)</label><input type="color" id="bg1" value="#d4c5a9"></div>
-      <div class="fg"><label>색상 2 (중)</label><input type="color" id="bg2" value="#9ca3a4"></div>
-      <div class="fg"><label>색상 3 (우)</label><input type="color" id="bg3" value="#5a7a8c"></div>
+    <div class="bg-grid">
+
+      <div class="fg"><label>색상 1 (좌)</label>
+        <div class="sw-wrap">
+          <button class="sw-btn" onclick="togglePicker(event,'bg1')">
+            <div class="sw-dot" id="dot-bg1" style="background:#d4c5a9;"></div>
+            <span class="sw-hex" id="hex-bg1">#d4c5a9</span>
+          </button>
+          <div class="cp-pop" id="pop-bg1">
+            <input type="color" class="cp-native" id="cpn-bg1" value="#d4c5a9">
+            <div class="cp-row"><label>HEX</label><input type="text" id="cph-bg1" value="#d4c5a9" maxlength="7"></div>
+            <div class="cp-rgb-grid">
+              <div class="cp-rgb-item"><label>R</label><input type="number" id="cpr-bg1" min="0" max="255" value="212"></div>
+              <div class="cp-rgb-item"><label>G</label><input type="number" id="cpg-bg1" min="0" max="255" value="197"></div>
+              <div class="cp-rgb-item"><label>B</label><input type="number" id="cpb-bg1" min="0" max="255" value="169"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fg"><label>색상 2 (중)</label>
+        <div class="sw-wrap">
+          <button class="sw-btn" onclick="togglePicker(event,'bg2')">
+            <div class="sw-dot" id="dot-bg2" style="background:#9ca3a4;"></div>
+            <span class="sw-hex" id="hex-bg2">#9ca3a4</span>
+          </button>
+          <div class="cp-pop" id="pop-bg2">
+            <input type="color" class="cp-native" id="cpn-bg2" value="#9ca3a4">
+            <div class="cp-row"><label>HEX</label><input type="text" id="cph-bg2" value="#9ca3a4" maxlength="7"></div>
+            <div class="cp-rgb-grid">
+              <div class="cp-rgb-item"><label>R</label><input type="number" id="cpr-bg2" min="0" max="255" value="156"></div>
+              <div class="cp-rgb-item"><label>G</label><input type="number" id="cpg-bg2" min="0" max="255" value="163"></div>
+              <div class="cp-rgb-item"><label>B</label><input type="number" id="cpb-bg2" min="0" max="255" value="164"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="fg"><label>색상 3 (우)</label>
+        <div class="sw-wrap">
+          <button class="sw-btn" onclick="togglePicker(event,'bg3')">
+            <div class="sw-dot" id="dot-bg3" style="background:#5a7a8c;"></div>
+            <span class="sw-hex" id="hex-bg3">#5a7a8c</span>
+          </button>
+          <div class="cp-pop" id="pop-bg3">
+            <input type="color" class="cp-native" id="cpn-bg3" value="#5a7a8c">
+            <div class="cp-row"><label>HEX</label><input type="text" id="cph-bg3" value="#5a7a8c" maxlength="7"></div>
+            <div class="cp-rgb-grid">
+              <div class="cp-rgb-item"><label>R</label><input type="number" id="cpr-bg3" min="0" max="255" value="90"></div>
+              <div class="cp-rgb-item"><label>G</label><input type="number" id="cpg-bg3" min="0" max="255" value="122"></div>
+              <div class="cp-rgb-item"><label>B</label><input type="number" id="cpb-bg3" min="0" max="255" value="140"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <div class="banner-wrapper" id="banner-wrapper">
+  <!-- 배너 미리보기 -->
+  <div class="banner-wrap" id="banner-wrap">
     <div id="banner">
       <div class="hc">
         <div id="el-logo"></div>
@@ -90,84 +544,241 @@
   </div>
 </div>
 
+<!-- 우클릭 메뉴 -->
 <div class="ctx-menu" id="ctx-menu">
   <div class="ctx-item" id="ctx-dl">⬇ PNG로 다운로드</div>
   <div class="ctx-sep"></div>
   <div class="ctx-item" id="ctx-cp">📋 클립보드에 복사</div>
 </div>
+
+<!-- 토스트 -->
 <div class="toast" id="toast"></div>
 
 <script>
-const fonts=['Segoe UI','Arial','Georgia','Trebuchet MS','Verdana','Tahoma','Times New Roman','Courier New','Impact','Palatino'];
-const presetGrads=[
-  ['#d4c5a9','#9ca3a4','#5a7a8c'],['#1a1a2e','#16213e','#0f3460'],
-  ['#f7971e','#ffd200','#f7971e'],['#134e5e','#71b280','#134e5e'],
-  ['#c94b4b','#4b134f','#c94b4b'],['#2c3e50','#4ca1af','#2c3e50'],
-  ['#373b44','#4286f4','#373b44'],['#ee9ca7','#ffdde1','#ee9ca7'],
-  ['#2980b9','#6dd5fa','#2980b9'],['#1d2671','#c33764','#1d2671'],
-];
+  const fontGroups = [
+    { label: '한국어 폰트', fonts: ['Pretendard', 'Noto Sans KR', 'Noto Serif KR', 'Spoqa Han Sans Neo'] },
+    { label: '영어 폰트', fonts: ['Montserrat', 'Poppins', 'Raleway', 'Oswald', 'Playfair Display', 'Merriweather', 'Dancing Script', 'Roboto', 'Open Sans', 'Lato'] },
+    { label: '시스템 폰트', fonts: ['Segoe UI', 'Arial', 'Georgia', 'Impact', 'Courier New', 'Times New Roman'] }
+  ];
 
-['fnt-logo','fnt-name','fnt-tag'].forEach(id=>{
-  const sel=document.getElementById(id);
-  fonts.forEach(f=>{const o=document.createElement('option');o.value=f;o.textContent=f;sel.appendChild(o);});
-});
+  const DEFAULTS = {
+    logo: { text: '', font: 'Pretendard', size: 22, color: '#ffffff' },
+    name: { text: '', font: 'Pretendard', size: 28, color: '#ffffff' },
+    tag:  { text: '', font: 'Pretendard', size: 14, color: '#ffffff' },
+    bg:   { c1: '#d4c5a9', c2: '#9ca3a4', c3: '#5a7a8c' }
+  };
 
-const presetsEl=document.getElementById('presets');
-presetGrads.forEach((g,i)=>{
-  const btn=document.createElement('div');
-  btn.className='preset-btn'+(i===0?' active':'');
-  btn.style.background=`linear-gradient(135deg,${g[0]},${g[1]},${g[2]})`;
-  btn.addEventListener('click',()=>{
-    document.getElementById('bg1').value=g[0];
-    document.getElementById('bg2').value=g[1];
-    document.getElementById('bg3').value=g[2];
-    document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    updateBg();
+  const colorState = {
+    logo: '#ffffff', name: '#ffffff', tag: '#ffffff',
+    bg1: '#d4c5a9', bg2: '#9ca3a4', bg3: '#5a7a8c'
+  };
+
+  // 폰트 셀렉트 채우기
+  ['fnt-logo', 'fnt-name', 'fnt-tag'].forEach(id => {
+    const sel = document.getElementById(id);
+    fontGroups.forEach(g => {
+      const og = document.createElement('optgroup');
+      og.label = g.label;
+      g.fonts.forEach(f => {
+        const o = document.createElement('option');
+        o.value = f; o.textContent = f;
+        og.appendChild(o);
+      });
+      sel.appendChild(og);
+    });
+    sel.value = 'Pretendard';
   });
-  presetsEl.appendChild(btn);
-});
 
-function updateBg(){
-  const c1=document.getElementById('bg1').value,c2=document.getElementById('bg2').value,c3=document.getElementById('bg3').value;
-  document.getElementById('banner').style.background=`linear-gradient(135deg,${c1} 0%,${c2} 50%,${c3} 100%)`;
-}
-['bg1','bg2','bg3'].forEach(id=>{document.getElementById(id).addEventListener('input',()=>{document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));updateBg();});});
+  // 색상 유틸
+  function hexToRgb(hex) {
+    const h = hex.replace('#', '');
+    return { r: parseInt(h.slice(0,2),16)||0, g: parseInt(h.slice(2,4),16)||0, b: parseInt(h.slice(4,6),16)||0 };
+  }
+  function rgbToHex(r, g, b) {
+    const c = v => Math.max(0, Math.min(255, parseInt(v)||0)).toString(16).padStart(2, '0');
+    return '#' + c(r) + c(g) + c(b);
+  }
 
-['logo','name','tag'].forEach(k=>{
-  const inp=document.getElementById('inp-'+k),el=document.getElementById('el-'+k);
-  const fnt=document.getElementById('fnt-'+k),sz=document.getElementById('sz-'+k);
-  const col=document.getElementById('col-'+k),vEl=document.getElementById('v-'+k);
-  inp.addEventListener('input',()=>el.textContent=inp.value);
-  fnt.addEventListener('change',()=>el.style.fontFamily=fnt.value);
-  sz.addEventListener('input',()=>{el.style.fontSize=sz.value+'px';vEl.textContent=sz.value+'px';});
-  col.addEventListener('input',()=>el.style.color=col.value);
-});
+  function applyColorToEl(key, hex) {
+    if (key === 'logo') document.getElementById('el-logo').style.color = hex;
+    if (key === 'name') document.getElementById('el-name').style.color = hex;
+    if (key === 'tag')  document.getElementById('el-tag').style.color = hex;
+    if (key.startsWith('bg')) updateBg();
+  }
 
-updateBg();
+  function syncPickerUI(key, hex) {
+    const { r, g, b } = hexToRgb(hex);
+    document.getElementById('dot-' + key).style.background = hex;
+    document.getElementById('hex-' + key).textContent = hex;
+    document.getElementById('cpn-' + key).value = hex;
+    document.getElementById('cph-' + key).value = hex;
+    document.getElementById('cpr-' + key).value = r;
+    document.getElementById('cpg-' + key).value = g;
+    document.getElementById('cpb-' + key).value = b;
+  }
 
-function captureBanner(cb){html2canvas(document.getElementById('banner'),{scale:3,useCORS:true,backgroundColor:null}).then(cb);}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity=1;setTimeout(()=>t.style.opacity=0,2200);}
+  function updateColor(key, hex) {
+    if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return;
+    colorState[key] = hex;
+    syncPickerUI(key, hex);
+    applyColorToEl(key, hex);
+  }
 
-const menu=document.getElementById('ctx-menu');
-document.getElementById('banner-wrapper').addEventListener('contextmenu',e=>{
-  e.preventDefault();menu.style.display='block';
-  menu.style.left=Math.min(e.clientX,window.innerWidth-190)+'px';
-  menu.style.top=Math.min(e.clientY,window.innerHeight-110)+'px';
-});
-document.addEventListener('click',()=>menu.style.display='none');
+  // 피커 이벤트 바인딩
+  ['logo', 'name', 'tag', 'bg1', 'bg2', 'bg3'].forEach(key => {
+    document.getElementById('cpn-' + key).addEventListener('input', e => updateColor(key, e.target.value));
 
-document.getElementById('ctx-dl').addEventListener('click',()=>{
-  menu.style.display='none';
-  captureBanner(canvas=>{const a=document.createElement('a');a.download='linkedin-banner.png';a.href=canvas.toDataURL('image/png');a.click();showToast('PNG 다운로드 완료!');});
-});
-document.getElementById('ctx-cp').addEventListener('click',()=>{
-  menu.style.display='none';
-  captureBanner(canvas=>{canvas.toBlob(blob=>{
-    try{navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);showToast('클립보드에 복사되었어요!');}
-    catch{showToast('복사 실패 — 브라우저 권한을 확인해주세요');}
-  });});
-});
+    document.getElementById('cph-' + key).addEventListener('input', e => {
+      let v = e.target.value.trim();
+      if (!v.startsWith('#')) v = '#' + v;
+      if (/^#[0-9a-fA-F]{6}$/.test(v)) updateColor(key, v);
+    });
+
+    ['r', 'g', 'b'].forEach(ch => {
+      document.getElementById('cp' + ch + '-' + key).addEventListener('input', () => {
+        const r = document.getElementById('cpr-' + key).value;
+        const g = document.getElementById('cpg-' + key).value;
+        const b = document.getElementById('cpb-' + key).value;
+        const hex = rgbToHex(r, g, b);
+        colorState[key] = hex;
+        document.getElementById('dot-' + key).style.background = hex;
+        document.getElementById('hex-' + key).textContent = hex;
+        document.getElementById('cpn-' + key).value = hex;
+        document.getElementById('cph-' + key).value = hex;
+        applyColorToEl(key, hex);
+      });
+    });
+  });
+
+  // 피커 토글
+  let activePicker = null;
+  function togglePicker(e, key) {
+    e.stopPropagation();
+    const pop = document.getElementById('pop-' + key);
+    const isOpen = pop.classList.contains('open');
+    document.querySelectorAll('.cp-pop.open').forEach(p => p.classList.remove('open'));
+    activePicker = null;
+    if (!isOpen) { pop.classList.add('open'); activePicker = key; }
+  }
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.sw-wrap') && activePicker) {
+      document.getElementById('pop-' + activePicker).classList.remove('open');
+      activePicker = null;
+    }
+  });
+
+  // 텍스트 / 폰트 / 사이즈
+  ['logo', 'name', 'tag'].forEach(k => {
+    document.getElementById('inp-' + k).addEventListener('input', e => {
+      document.getElementById('el-' + k).textContent = e.target.value;
+    });
+    document.getElementById('fnt-' + k).addEventListener('change', e => {
+      document.getElementById('el-' + k).style.fontFamily = e.target.value;
+    });
+    document.getElementById('sz-' + k).addEventListener('input', e => {
+      document.getElementById('el-' + k).style.fontSize = e.target.value + 'px';
+      document.getElementById('v-' + k).textContent = e.target.value + 'px';
+    });
+  });
+
+  // 배경 프리셋
+  const presetGrads = [
+    ['#d4c5a9','#9ca3a4','#5a7a8c'], ['#1a1a2e','#16213e','#0f3460'],
+    ['#f7971e','#ffd200','#f7971e'], ['#134e5e','#71b280','#134e5e'],
+    ['#c94b4b','#4b134f','#c94b4b'], ['#2c3e50','#4ca1af','#2c3e50'],
+    ['#373b44','#4286f4','#373b44'], ['#ee9ca7','#ffdde1','#ee9ca7'],
+    ['#2980b9','#6dd5fa','#2980b9'], ['#1d2671','#c33764','#1d2671'],
+  ];
+
+  const presetsEl = document.getElementById('presets');
+  presetGrads.forEach((g, i) => {
+    const btn = document.createElement('div');
+    btn.className = 'preset-btn' + (i === 0 ? ' active' : '');
+    btn.style.background = `linear-gradient(135deg,${g[0]},${g[1]},${g[2]})`;
+    btn.addEventListener('click', () => {
+      updateColor('bg1', g[0]); updateColor('bg2', g[1]); updateColor('bg3', g[2]);
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+    presetsEl.appendChild(btn);
+  });
+
+  function updateBg() {
+    document.getElementById('banner').style.background =
+      `linear-gradient(135deg,${colorState.bg1} 0%,${colorState.bg2} 50%,${colorState.bg3} 100%)`;
+  }
+
+  // 초기화
+  function resetSection(k) {
+    const d = DEFAULTS[k];
+    document.getElementById('inp-' + k).value = d.text;
+    document.getElementById('el-' + k).textContent = d.text;
+    document.getElementById('fnt-' + k).value = d.font;
+    document.getElementById('el-' + k).style.fontFamily = d.font;
+    document.getElementById('sz-' + k).value = d.size;
+    document.getElementById('el-' + k).style.fontSize = d.size + 'px';
+    document.getElementById('v-' + k).textContent = d.size + 'px';
+    updateColor(k, d.color);
+  }
+
+  function resetAll() {
+    ['logo', 'name', 'tag'].forEach(k => resetSection(k));
+    updateColor('bg1', DEFAULTS.bg.c1);
+    updateColor('bg2', DEFAULTS.bg.c2);
+    updateColor('bg3', DEFAULTS.bg.c3);
+    document.querySelectorAll('.preset-btn').forEach((b, i) => b.classList.toggle('active', i === 0));
+  }
+
+  // 초기 배경 적용
+  updateBg();
+
+  // 캡처
+  function captureBanner(cb) {
+    html2canvas(document.getElementById('banner'), { scale: 3, useCORS: true, backgroundColor: null }).then(cb);
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.style.opacity = 1;
+    setTimeout(() => t.style.opacity = 0, 2200);
+  }
+
+  // 우클릭 메뉴
+  const menu = document.getElementById('ctx-menu');
+
+  document.getElementById('banner-wrap').addEventListener('contextmenu', e => {
+    e.preventDefault();
+    menu.style.display = 'block';
+    menu.style.left = Math.min(e.clientX, window.innerWidth - 190) + 'px';
+    menu.style.top = Math.min(e.clientY, window.innerHeight - 110) + 'px';
+  });
+
+  document.addEventListener('click', () => menu.style.display = 'none');
+
+  document.getElementById('ctx-dl').addEventListener('click', () => {
+    menu.style.display = 'none';
+    captureBanner(canvas => {
+      const a = document.createElement('a');
+      a.download = 'linkedin-banner.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+      showToast('PNG 다운로드 완료!');
+    });
+  });
+
+  document.getElementById('ctx-cp').addEventListener('click', () => {
+    menu.style.display = 'none';
+    captureBanner(canvas => {
+      canvas.toBlob(blob => {
+        try {
+          navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+          showToast('클립보드에 복사되었어요!');
+        } catch {
+          showToast('복사 실패 — 브라우저 권한을 확인해주세요');
+        }
+      });
+    });
+  });
 </script>
 </body>
 </html>
