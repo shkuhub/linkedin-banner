@@ -1,315 +1,173 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LinkedIn Banner Editor</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f5f5;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-        }
-
-        .page-wrap {
-            width: 100%;
-            max-width: 1000px;
-        }
-
-        h2 {
-            font-size: 18px;
-            font-weight: 500;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        /* 입력 필드 영역 */
-        .fields {
-            display: grid;
-            grid-template-columns: 1fr 2fr 4fr;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .field-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .field-group label {
-            font-size: 13px;
-            color: #666;
-        }
-
-        .field-group input {
-            font-size: 14px;
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .field-group input:focus {
-            border-color: #5a7a8c;
-        }
-
-        /* 배너 영역 */
-        .banner-wrapper {
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            cursor: context-menu;
-        }
-
-        .banner-wrapper:hover .hover-hint {
-            opacity: 1;
-        }
-
-        .hover-hint {
-            position: absolute;
-            bottom: 12px;
-            right: 14px;
-            background: rgba(0,0,0,0.55);
-            color: #fff;
-            font-size: 12px;
-            padding: 5px 12px;
-            border-radius: 20px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        #banner {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #d4c5a9 0%, #9ca3a4 50%, #5a7a8c 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        #banner::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 60%);
-        }
-
-        .header-content {
-            text-align: center;
-            z-index: 2;
-            color: white;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-
-        .logo {
-            width: 60px;
-            height: 60px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            font-weight: bold;
-            border: 2px solid rgba(255,255,255,0.3);
-            color: white;
-        }
-
-        .company-name {
-            font-size: 28px;
-            font-weight: 300;
-            letter-spacing: 2px;
-            margin-bottom: 8px;
-            color: white;
-        }
-
-        .tagline {
-            font-size: 14px;
-            opacity: 0.9;
-            font-weight: 300;
-            letter-spacing: 1px;
-            color: white;
-            margin: 0;
-        }
-
-        /* 우클릭 컨텍스트 메뉴 */
-        .ctx-menu {
-            position: fixed;
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            border-radius: 10px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-            z-index: 9999;
-            overflow: hidden;
-            min-width: 180px;
-            display: none;
-        }
-
-        .ctx-item {
-            padding: 11px 16px;
-            font-size: 14px;
-            cursor: pointer;
-            color: #333;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: background 0.15s;
-        }
-
-        .ctx-item:hover {
-            background: #f5f5f5;
-        }
-
-        .ctx-sep {
-            height: 1px;
-            background: #eee;
-        }
-
-        /* 토스트 알림 */
-        .toast {
-            position: fixed;
-            bottom: 28px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #222;
-            color: #fff;
-            padding: 9px 22px;
-            border-radius: 20px;
-            font-size: 13px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 9999;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkedIn Banner Editor</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Segoe UI',sans-serif;background:#f5f5f5;min-height:100vh;padding:40px 20px;display:flex;justify-content:center;}
+    .page{width:100%;max-width:1000px;}
+    h2{font-size:18px;font-weight:500;color:#333;margin-bottom:20px;}
+    .panel{background:#fff;border-radius:12px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+    .panel-title{font-size:11px;font-weight:600;color:#999;letter-spacing:.6px;text-transform:uppercase;margin-bottom:12px;}
+    .row{display:grid;gap:10px;margin-bottom:10px;}
+    .row-4{grid-template-columns:1fr 1fr 1fr 1fr;}
+    .fg{display:flex;flex-direction:column;gap:5px;}
+    .fg label{font-size:12px;color:#666;}
+    .fg input[type=text],.fg select{font-size:13px;padding:7px 10px;border:1px solid #ddd;border-radius:8px;width:100%;outline:none;background:#fff;}
+    .fg input[type=text]:focus,.fg select:focus{border-color:#5a7a8c;}
+    .fg input[type=range]{width:100%;accent-color:#5a7a8c;}
+    .fg input[type=color]{width:100%;height:36px;border:1px solid #ddd;border-radius:8px;cursor:pointer;padding:2px;}
+    .sz-val{font-size:12px;color:#999;display:inline;}
+    .color-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+    .presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+    .preset-btn{width:44px;height:26px;border-radius:6px;border:2px solid transparent;cursor:pointer;transition:transform .15s;}
+    .preset-btn:hover{transform:scale(1.1);}
+    .preset-btn.active{border-color:#5a7a8c;}
+    .banner-wrapper{position:relative;border-radius:12px;overflow:hidden;cursor:context-menu;}
+    .banner-wrapper:hover .hover-hint{opacity:1;}
+    .hover-hint{position:absolute;bottom:10px;right:12px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;padding:4px 10px;border-radius:20px;opacity:0;transition:opacity .2s;pointer-events:none;}
+    #banner{width:100%;height:200px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+    #banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 20%,rgba(255,255,255,.1) 0%,transparent 60%);}
+    .hc{text-align:center;z-index:2;color:white;text-shadow:0 2px 10px rgba(0,0,0,.3);padding:0 20px;}
+    #el-logo{width:60px;height:60px;background:rgba(255,255,255,.2);border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-weight:bold;border:2px solid rgba(255,255,255,.3);color:white;font-size:22px;}
+    #el-name{font-weight:300;letter-spacing:2px;margin-bottom:6px;color:white;font-size:28px;}
+    #el-tag{opacity:.9;font-weight:300;letter-spacing:1px;margin:0;color:white;font-size:14px;}
+    .ctx-menu{position:fixed;background:#fff;border:1px solid #eee;border-radius:10px;box-shadow:0 6px 20px rgba(0,0,0,.12);z-index:9999;overflow:hidden;min-width:180px;display:none;}
+    .ctx-item{padding:11px 16px;font-size:13px;cursor:pointer;color:#333;display:flex;align-items:center;gap:10px;}
+    .ctx-item:hover{background:#f5f5f5;}
+    .ctx-sep{height:1px;background:#eee;}
+    .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:9px 22px;border-radius:20px;font-size:13px;pointer-events:none;opacity:0;transition:opacity .3s;z-index:9999;}
+  </style>
 </head>
 <body>
+<div class="page">
+  <h2>LinkedIn Banner Editor</h2>
 
-    <div class="page-wrap">
-        <h2>LinkedIn Banner Editor</h2>
-
-        <!-- 입력 필드 -->
-        <div class="fields">
-            <div class="field-group">
-                <label>로고 텍스트</label>
-                <input id="inp-logo" type="text" value="SH" maxlength="4" placeholder="SH">
-            </div>
-            <div class="field-group">
-                <label>이름</label>
-                <input id="inp-name" type="text" value="Sehee Ku" placeholder="Your Name">
-            </div>
-            <div class="field-group">
-                <label>태그라인</label>
-                <input id="inp-tag" type="text" value="Oracle Eloqua & Salesforce Marketing Cloud Expert" placeholder="Your tagline">
-            </div>
-        </div>
-
-        <!-- 배너 미리보기 -->
-        <div class="banner-wrapper" id="banner-wrapper">
-            <div id="banner">
-                <div class="header-content">
-                    <div class="logo" id="el-logo">SH</div>
-                    <h1 class="company-name" id="el-name">Sehee Ku</h1>
-                    <p class="tagline" id="el-tag">Oracle Eloqua & Salesforce Marketing Cloud Expert</p>
-                </div>
-            </div>
-            <span class="hover-hint">우클릭으로 저장 / 복사</span>
-        </div>
+  <div class="panel">
+    <div class="panel-title">텍스트 설정</div>
+    <div class="row row-4" style="align-items:end;">
+      <div class="fg"><label>로고 이니셜</label><input type="text" id="inp-logo" maxlength="4" placeholder="Your Initial Name"></div>
+      <div class="fg"><label>폰트</label><select id="fnt-logo"></select></div>
+      <div class="fg"><label>크기 <span class="sz-val" id="v-logo">22px</span></label><input type="range" id="sz-logo" min="12" max="40" value="22"></div>
+      <div class="fg"><label>색상</label><input type="color" id="col-logo" value="#ffffff"></div>
     </div>
-
-    <!-- 우클릭 메뉴 -->
-    <div class="ctx-menu" id="ctx-menu">
-        <div class="ctx-item" id="ctx-download">⬇ PNG로 다운로드</div>
-        <div class="ctx-sep"></div>
-        <div class="ctx-item" id="ctx-copy">📋 클립보드에 복사</div>
+    <div class="row row-4" style="align-items:end;">
+      <div class="fg"><label>이름</label><input type="text" id="inp-name" placeholder="Your Name"></div>
+      <div class="fg"><label>폰트</label><select id="fnt-name"></select></div>
+      <div class="fg"><label>크기 <span class="sz-val" id="v-name">28px</span></label><input type="range" id="sz-name" min="14" max="60" value="28"></div>
+      <div class="fg"><label>색상</label><input type="color" id="col-name" value="#ffffff"></div>
     </div>
+    <div class="row row-4" style="align-items:end;">
+      <div class="fg"><label>태그라인</label><input type="text" id="inp-tag" placeholder="Your tagline"></div>
+      <div class="fg"><label>폰트</label><select id="fnt-tag"></select></div>
+      <div class="fg"><label>크기 <span class="sz-val" id="v-tag">14px</span></label><input type="range" id="sz-tag" min="10" max="36" value="14"></div>
+      <div class="fg"><label>색상</label><input type="color" id="col-tag" value="#ffffff"></div>
+    </div>
+  </div>
 
-    <!-- 토스트 -->
-    <div class="toast" id="toast"></div>
+  <div class="panel">
+    <div class="panel-title">배경 그라데이션</div>
+    <div class="presets" id="presets"></div>
+    <div class="color-row">
+      <div class="fg"><label>색상 1 (좌)</label><input type="color" id="bg1" value="#d4c5a9"></div>
+      <div class="fg"><label>색상 2 (중)</label><input type="color" id="bg2" value="#9ca3a4"></div>
+      <div class="fg"><label>색상 3 (우)</label><input type="color" id="bg3" value="#5a7a8c"></div>
+    </div>
+  </div>
 
-    <script>
-        // 실시간 입력 반영
-        document.getElementById('inp-logo').addEventListener('input', e => {
-            document.getElementById('el-logo').textContent = e.target.value;
-        });
-        document.getElementById('inp-name').addEventListener('input', e => {
-            document.getElementById('el-name').textContent = e.target.value;
-        });
-        document.getElementById('inp-tag').addEventListener('input', e => {
-            document.getElementById('el-tag').textContent = e.target.value;
-        });
+  <div class="banner-wrapper" id="banner-wrapper">
+    <div id="banner">
+      <div class="hc">
+        <div id="el-logo"></div>
+        <h1 id="el-name"></h1>
+        <p id="el-tag"></p>
+      </div>
+    </div>
+    <span class="hover-hint">우클릭 → 저장 / 복사</span>
+  </div>
+</div>
 
-        // 토스트 메시지
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.style.opacity = 1;
-            setTimeout(() => t.style.opacity = 0, 2200);
-        }
+<div class="ctx-menu" id="ctx-menu">
+  <div class="ctx-item" id="ctx-dl">⬇ PNG로 다운로드</div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item" id="ctx-cp">📋 클립보드에 복사</div>
+</div>
+<div class="toast" id="toast"></div>
 
-        // html2canvas로 배너 캡처
-        function captureBanner(callback) {
-            html2canvas(document.getElementById('banner'), {
-                scale: 3,
-                useCORS: true,
-                backgroundColor: null
-            }).then(callback);
-        }
+<script>
+const fonts=['Segoe UI','Arial','Georgia','Trebuchet MS','Verdana','Tahoma','Times New Roman','Courier New','Impact','Palatino'];
+const presetGrads=[
+  ['#d4c5a9','#9ca3a4','#5a7a8c'],['#1a1a2e','#16213e','#0f3460'],
+  ['#f7971e','#ffd200','#f7971e'],['#134e5e','#71b280','#134e5e'],
+  ['#c94b4b','#4b134f','#c94b4b'],['#2c3e50','#4ca1af','#2c3e50'],
+  ['#373b44','#4286f4','#373b44'],['#ee9ca7','#ffdde1','#ee9ca7'],
+  ['#2980b9','#6dd5fa','#2980b9'],['#1d2671','#c33764','#1d2671'],
+];
 
-        // 우클릭 메뉴 표시
-        const menu = document.getElementById('ctx-menu');
-        const wrapper = document.getElementById('banner-wrapper');
+['fnt-logo','fnt-name','fnt-tag'].forEach(id=>{
+  const sel=document.getElementById(id);
+  fonts.forEach(f=>{const o=document.createElement('option');o.value=f;o.textContent=f;sel.appendChild(o);});
+});
 
-        wrapper.addEventListener('contextmenu', e => {
-            e.preventDefault();
-            menu.style.display = 'block';
-            menu.style.left = Math.min(e.clientX, window.innerWidth - 190) + 'px';
-            menu.style.top = Math.min(e.clientY, window.innerHeight - 110) + 'px';
-        });
+const presetsEl=document.getElementById('presets');
+presetGrads.forEach((g,i)=>{
+  const btn=document.createElement('div');
+  btn.className='preset-btn'+(i===0?' active':'');
+  btn.style.background=`linear-gradient(135deg,${g[0]},${g[1]},${g[2]})`;
+  btn.addEventListener('click',()=>{
+    document.getElementById('bg1').value=g[0];
+    document.getElementById('bg2').value=g[1];
+    document.getElementById('bg3').value=g[2];
+    document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    updateBg();
+  });
+  presetsEl.appendChild(btn);
+});
 
-        document.addEventListener('click', () => menu.style.display = 'none');
+function updateBg(){
+  const c1=document.getElementById('bg1').value,c2=document.getElementById('bg2').value,c3=document.getElementById('bg3').value;
+  document.getElementById('banner').style.background=`linear-gradient(135deg,${c1} 0%,${c2} 50%,${c3} 100%)`;
+}
+['bg1','bg2','bg3'].forEach(id=>{document.getElementById(id).addEventListener('input',()=>{document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));updateBg();});});
 
-        // PNG 다운로드
-        document.getElementById('ctx-download').addEventListener('click', () => {
-            menu.style.display = 'none';
-            captureBanner(canvas => {
-                const a = document.createElement('a');
-                a.download = 'linkedin-banner.png';
-                a.href = canvas.toDataURL('image/png');
-                a.click();
-                showToast('PNG 다운로드 완료!');
-            });
-        });
+['logo','name','tag'].forEach(k=>{
+  const inp=document.getElementById('inp-'+k),el=document.getElementById('el-'+k);
+  const fnt=document.getElementById('fnt-'+k),sz=document.getElementById('sz-'+k);
+  const col=document.getElementById('col-'+k),vEl=document.getElementById('v-'+k);
+  inp.addEventListener('input',()=>el.textContent=inp.value);
+  fnt.addEventListener('change',()=>el.style.fontFamily=fnt.value);
+  sz.addEventListener('input',()=>{el.style.fontSize=sz.value+'px';vEl.textContent=sz.value+'px';});
+  col.addEventListener('input',()=>el.style.color=col.value);
+});
 
-        // 클립보드 복사
-        document.getElementById('ctx-copy').addEventListener('click', () => {
-            menu.style.display = 'none';
-            captureBanner(canvas => {
-                canvas.toBlob(blob => {
-                    try {
-                        navigator.clipboard.write([
-                            new ClipboardItem({ 'image/png': blob })
-                        ]);
-                        showToast('클립보드에 복사되었어요!');
-                    } catch (err) {
-                        showToast('복사 실패 — 브라우저 권한을 확인해주세요');
-                    }
-                });
-            });
-        });
-    </script>
+updateBg();
+
+function captureBanner(cb){html2canvas(document.getElementById('banner'),{scale:3,useCORS:true,backgroundColor:null}).then(cb);}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity=1;setTimeout(()=>t.style.opacity=0,2200);}
+
+const menu=document.getElementById('ctx-menu');
+document.getElementById('banner-wrapper').addEventListener('contextmenu',e=>{
+  e.preventDefault();menu.style.display='block';
+  menu.style.left=Math.min(e.clientX,window.innerWidth-190)+'px';
+  menu.style.top=Math.min(e.clientY,window.innerHeight-110)+'px';
+});
+document.addEventListener('click',()=>menu.style.display='none');
+
+document.getElementById('ctx-dl').addEventListener('click',()=>{
+  menu.style.display='none';
+  captureBanner(canvas=>{const a=document.createElement('a');a.download='linkedin-banner.png';a.href=canvas.toDataURL('image/png');a.click();showToast('PNG 다운로드 완료!');});
+});
+document.getElementById('ctx-cp').addEventListener('click',()=>{
+  menu.style.display='none';
+  captureBanner(canvas=>{canvas.toBlob(blob=>{
+    try{navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);showToast('클립보드에 복사되었어요!');}
+    catch{showToast('복사 실패 — 브라우저 권한을 확인해주세요');}
+  });});
+});
+</script>
 </body>
 </html>
